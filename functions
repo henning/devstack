@@ -812,7 +812,16 @@ function upload_image() {
             DISK_FORMAT=qcow2
             CONTAINER_FORMAT=bare
             ;;
-        *) echo "Do not know what to do with $IMAGE_FNAME"; false;;
+	*.iso)
+            IMAGE="$FILES/${IMAGE_FNAME}"
+            IMAGE_NAME=$(basename "$IMAGE" ".iso")
+            DISK_FORMAT=iso
+            CONTAINER_FORMAT=bare
+	    ;;
+        *) echo "Do not know what to do with $IMAGE_FNAME"; 
+	# FIXME: that seems not to be enough to stop doing something here! we end up getting the previous image twice for each image that is unknown?!
+	false
+	;;
     esac
 
     if [ "$CONTAINER_FORMAT" = "bare" ]; then
